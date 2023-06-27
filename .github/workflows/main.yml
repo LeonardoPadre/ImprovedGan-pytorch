@@ -1,4 +1,4 @@
-name: Build-sphinx-docs
+name: continuous integration
 
 on:
   push:
@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
 
 jobs: 
-  build: 
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -30,10 +31,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install sphinx_rtd_theme
           pip install imageio
+          pip install flake8 pytest
+
+      - name: Lint with flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Test with pytest
+        run: |
+          pytest
+
       - name: Build HTML
         run: |
           cd docs/
           make html
+
       - name: Run ghp-import
         run: |
           ghp-import -n -p -f docs/_build/html
