@@ -31,7 +31,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install sphinx_rtd_theme
           pip install imageio
-          pip install flake8 pytest
+          pip install flake8 pytest pytest-cov
 
       - name: Lint with flake8
         run: |
@@ -41,7 +41,7 @@ jobs:
       - name: Test with pytest
         run: |
           cd tests/
-          pytest
+          pytest -vv --cov
 
       - name: Build HTML
         run: |
